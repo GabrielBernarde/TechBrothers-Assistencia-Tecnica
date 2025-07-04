@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nossos Produtos - Tech Brothers</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .product-card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        .product-card h3 {
+            color: rgb(8, 119, 229);
+            margin-bottom: 15px;
+        }
+       
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-align: center;
+            position: relative;
+        }
+        .modal-content .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            cursor: pointer;
+        }
+        .modal-content .close-button:hover,
+        .modal-content .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .modal-product-image {
+            max-width: 80%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .modal-product-details p {
+            margin: 10px 0;
+            font-size: 18px;
+            color: #555;
+        }
+        .modal-product-details strong {
+            color: #333;
+        }
+        .thank-you-message {
+            margin-top: 30px;
+            font-size: 16px;
+            color: rgb(8, 119, 229);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <h1>Nossos Produtos</h1>
+
+    <div class="product-grid">
+        <div class="product-card" data-product="computador">
+            <h3>Computador</h3>
+            <p>Clique para ver detalhes</p>
+        </div>
+
+        <div class="product-card" data-product="telefone">
+            <h3>Telefone</h3>
+            <p>Clique para ver detalhes</p>
+        </div>
+
+        <div class="product-card" data-product="componentes-pc">
+            <h3>Componentes de Computador</h3>
+            <p>Clique para ver detalhes</p>
+        </div>
+
+        <div class="product-card" data-product="componentes-telefone">
+            <h3>Componentes de Telefone</h3>
+            <p>Clique para ver detalhes</p>
+        </div>
+    </div>
+
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 id="modal-product-title"></h2>
+            <img id="modal-product-image" src="" alt="Produto" class="modal-product-image">
+            <div class="modal-product-details">
+                <p>Preço: <strong id="modal-product-price"></strong></p>
+                <p>Tempo de Entrega: <strong id="modal-delivery-time"></strong></p>
+            </div>
+            <div class="thank-you-message">
+                Muito obrigado por conhecer meu site!
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const productCards = document.querySelectorAll('.product-card');
+            const productModal = document.getElementById('product-modal');
+            const closeButton = document.querySelector('#product-modal .close-button');
+            const modalProductTitle = document.getElementById('modal-product-title');
+            const modalProductImage = document.getElementById('modal-product-image');
+            const modalProductPrice = document.getElementById('modal-product-price');
+            const modalDeliveryTime = document.getElementById('modal-delivery-time');
+
+            
+            const products = {
+                'computador': {
+                    title: 'Computador Gamer de Alta Performance',
+                    image: 'https://via.placeholder.com/400x300?text=Computador', // 
+                    price: 'R$ 5.500,00',
+                    deliveryTime: '5-7 dias úteis'
+                },
+                'telefone': {
+                    title: 'Smartphone Última Geração',
+                    image: 'https://via.placeholder.com/400x300?text=Telefone', // 
+                    price: 'R$ 2.800,00',
+                    deliveryTime: '3-5 dias úteis'
+                },
+                'componentes-pc': {
+                    title: 'Kit Upgrade PC (Processador, RAM, SSD)',
+                    image: 'https://via.placeholder.com/400x300?text=Componentes+PC', 
+                    price: 'R$ 1.200,00',
+                    deliveryTime: '2-4 dias úteis'
+                },
+                'componentes-telefone': {
+                    title: 'Tela OLED para Smartphone',
+                    image: 'https://via.placeholder.com/400x300?text=Componentes+Telefone', 
+                    price: 'R$ 450,00',
+                    deliveryTime: '3-6 dias úteis'
+                }
+            };
+
+            productCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const productId = this.dataset.product;
+                    const product = products[productId];
+
+                    if (product) {
+                        modalProductTitle.textContent = product.title;
+                        modalProductImage.src = product.image;
+                        modalProductPrice.textContent = product.price;
+                        modalDeliveryTime.textContent = product.deliveryTime;
+                        productModal.style.display = 'flex'; 
+                    }
+                });
+            });
+
+            closeButton.addEventListener('click', function() {
+                productModal.style.display = 'none';
+            });
+
+            window.addEventListener('click', function(event) {
+                if (event.target === productModal) {
+                    productModal.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
